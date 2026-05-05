@@ -6,6 +6,7 @@ import Report from "../model/report.schema.js";
 import { dbLogger } from "../utils/logger.js";
 import fs from "fs/promises";
 import mongoose from "mongoose";
+import { encryptBuffer } from "../utils/encryption.js";
 
 
 export const generateMRIReport = async (req: Request, res: Response) => {
@@ -20,16 +21,6 @@ export const generateMRIReport = async (req: Request, res: Response) => {
                 success: false
             })
         }
-        
-        if (file) {
-            const buffer = file.buffer;
-            await fs.writeFile(`uploads/${Date.now()}.pdf`, buffer);
-
-            reportText = await extractTextWithOCRSpace(
-                file.buffer,
-                file.mimetype
-            );
-        }
 
         const cleanedText = stripPHI(reportText);
 
@@ -41,12 +32,26 @@ export const generateMRIReport = async (req: Request, res: Response) => {
             throw new Error(aiResult.error);
         }
 
+        let iv = "";
+
+        if (file) {
+            const encBuffer = encryptBuffer(file.buffer);
+            iv = encBuffer.iv;
+            await fs.writeFile(`uploads/${iv}.pdf`, encBuffer.data);
+
+            reportText = await extractTextWithOCRSpace(
+                file.buffer,
+                file.mimetype
+            );
+        }
+
         const report = await Report.create({
             summary_of_findings: aiResult.summary_of_findings || "",
             what_matters_most: aiResult.what_matters_most || "",
             how_it_relates_to_symptoms:
                 aiResult.how_it_relates_to_symptoms || "",
             questions_for_doctor: aiResult.questions_for_doctor || [],
+            iv: iv,
         });
 
         return res.status(200).json({
