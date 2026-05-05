@@ -35,3 +35,10 @@ export const decryptBuffer = (encryptedData: Buffer, ivHex: string) => {
 
     return decrypted;
 };
+
+export const getExtension = (mimetype: string) => {
+    if (mimetype === "application/pdf") return "pdf";
+    if (mimetype === "image/png") return "png";
+    if (mimetype === "image/jpeg") return "jpg";
+    return "bin";
+};

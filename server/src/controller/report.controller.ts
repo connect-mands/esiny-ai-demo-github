@@ -6,7 +6,7 @@ import Report from "../model/report.schema.js";
 import { dbLogger } from "../utils/logger.js";
 import fs from "fs/promises";
 import mongoose from "mongoose";
-import { encryptBuffer } from "../utils/encryption.js";
+import { encryptBuffer, getExtension } from "../utils/encryption.js";
 
 
 export const generateMRIReport = async (req: Request, res: Response) => {
@@ -37,7 +37,8 @@ export const generateMRIReport = async (req: Request, res: Response) => {
         if (file) {
             const encBuffer = encryptBuffer(file.buffer);
             iv = encBuffer.iv;
-            await fs.writeFile(`uploads/${iv}.pdf`, encBuffer.data);
+            const ext = getExtension(file.mimetype);
+            await fs.writeFile(`uploads/${iv}.${ext}`, encBuffer.data);
 
             reportText = await extractTextWithOCRSpace(
                 file.buffer,

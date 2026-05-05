@@ -20,7 +20,19 @@ export default function Home() {
             setFile(null);
             return;
         }
-        setFile(event.target.files[0]);
+
+        const file = event.target.files[0]
+        const allowedTypes = [
+            "application/pdf",
+            "image/png",
+            "image/jpeg",
+        ];
+        const isValid = allowedTypes.includes(file.type) || file.name.match(/\.(pdf|png|jpg|jpeg)$/i);
+        if (isValid) {
+            setFile(file);
+        } else {
+            toast.error("Unsupported file type. Please upload a PDF or image file.")
+        }
     }
 
     const handleSubmit = async (event: SyntheticEvent) => {
@@ -46,7 +58,7 @@ export default function Home() {
             })
             toast.success("Report generated successfully")
             navigate(`/report/${data.data.reportId}`)
-        } catch (error:any) {
+        } catch (error: any) {
             toast.error(error.response.data.message || "Error submitting form")
             console.error("Error submitting form:", error);
         } finally {
