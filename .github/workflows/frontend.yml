@@ -1,4 +1,4 @@
-name: Frontend CI
+name: Frontend Docker CI
 
 on:
   push:
@@ -19,10 +19,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - run: npm install
-
-      - run: npm run build
+      - name: Build Frontend Docker Image
+        run: docker build -t esiny-frontend .
