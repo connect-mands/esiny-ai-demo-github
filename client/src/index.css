@@ -1,9 +1,0 @@
-@import "tailwindcss";
-
-html {
-  scroll-behavior: smooth;
-}
-
-header {
-  will-change: transform, background;
-}
