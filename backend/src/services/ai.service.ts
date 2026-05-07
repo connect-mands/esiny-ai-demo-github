@@ -15,7 +15,7 @@ export const analyzeMRI = async ({
             response.data?.choices?.[0]?.message?.content ||
             response.data?.message ||
             "";
-
+        console.log("AI Response:", text);
         const match = text.match(/\{[\s\S]*\}/);
 
         if (!match) {

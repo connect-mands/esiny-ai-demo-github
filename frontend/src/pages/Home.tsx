@@ -1,4 +1,3 @@
-"use client";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "../api/client";
 import { COLORS } from "../constants/color";
@@ -91,6 +90,7 @@ export default function Home() {
                             Paste your MRI report
                         </label>
                         <textarea
+                            disabled={loading}
                             className="w-full border border-gray-200 rounded-md p-3 text-sm focus:outline-none focus:ring-1 focus:ring-black"
                             rows={6}
                             placeholder="Paste findings or impression section..."
@@ -108,6 +108,7 @@ export default function Home() {
                             Or upload MRI report
                         </label>
                         <input
+                            disabled={loading}
                             type="file"
                             accept=".pdf,.png,.jpg,.jpeg"
                             onChange={handleFileChange}
@@ -123,6 +124,7 @@ export default function Home() {
                             Symptoms (optional)
                         </label>
                         <input
+                            disabled={loading}
                             type="text"
                             className="w-full border border-gray-200 rounded-md p-3 text-sm focus:outline-none focus:ring-1 focus:ring-black"
                             placeholder="e.g. back pain, numbness..."

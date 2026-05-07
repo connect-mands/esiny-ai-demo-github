@@ -21,7 +21,7 @@ export const generateMRIReport = async (req: Request, res: Response) => {
                 success: false
             })
         }
-
+        console.log(reportText)
         const cleanedText = stripPHI(reportText);
 
         const aiResult = await analyzeMRI({
@@ -38,7 +38,7 @@ export const generateMRIReport = async (req: Request, res: Response) => {
             const encBuffer = encryptBuffer(file.buffer);
             iv = encBuffer.iv;
             const ext = getExtension(file.mimetype);
-            await fs.writeFile(`uploads/${iv}.${ext}`, encBuffer.data);
+            await fs.writeFile(`./uploads/${iv}.${ext}`, encBuffer.data);
 
             reportText = await extractTextWithOCRSpace(
                 file.buffer,
@@ -47,10 +47,9 @@ export const generateMRIReport = async (req: Request, res: Response) => {
         }
 
         const report = await Report.create({
-            summary_of_findings: aiResult.summary_of_findings || "",
+            summary: aiResult.summary || "",
+            findings: aiResult?.findings || [],
             what_matters_most: aiResult.what_matters_most || "",
-            how_it_relates_to_symptoms:
-                aiResult.how_it_relates_to_symptoms || "",
             questions_for_doctor: aiResult.questions_for_doctor || [],
             iv: iv,
         });

@@ -121,7 +121,7 @@ const Footer = () => {
                             popularTopics.map((topic) => (
                                 <li key={topic.label}>
                                     <Link
-                                        to={`${mainUrl}/${topic.to}`}
+                                        to={`${mainUrl}${topic.to}`}
                                         className={`text-gray-100 text-sm hover:text-[#02EEFF] hover:underline  transition`}
                                     >
                                         {topic.label}

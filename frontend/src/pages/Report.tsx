@@ -3,9 +3,14 @@ import { useParams } from "react-router-dom";
 import { apiClient } from "../api/client";
 import AppLayout from "../Layout/AppLayout";
 
+interface Ifindings {
+    heading:string,
+    explanation:string
+}
 
 interface data {
-    "summary_of_findings": string,
+    "summary": string,
+    "findings": Ifindings[]
     "what_matters_most": string,
     "how_it_relates_to_symptoms": string,
     "questions_for_doctor": string[]
@@ -60,7 +65,7 @@ const ReportPage = () => {
             </div>
         </AppLayout>
     }
-    
+
     return (
         <AppLayout>
             {
@@ -76,7 +81,7 @@ const ReportPage = () => {
                         <div className="flex gap-2">
 
 
-                            <button onClick={() => handleCopy(`http://localhost:5173/report/${id}`)} className="text-sm hover:bg-black hover:text-white transition duration-300 border px-3 py-1 rounded-md cursor-pointer">
+                            <button onClick={() => handleCopy(`${window.location.origin}/report/${id}`)} className="text-sm hover:bg-black hover:text-white transition duration-300 border px-3 py-1 rounded-md cursor-pointer">
                                 {isCopy ? "Copied!" : "Copy Share URL"}
                             </button>
 
@@ -97,11 +102,24 @@ const ReportPage = () => {
 
                         <section>
                             <h2 className="font-medium mb-1">
-                                Summary of findings
+                                Overview
                             </h2>
                             <p className="text-sm text-gray-700 leading-relaxed">
-                                {data.summary_of_findings}
+                                {data.summary}
                             </p>
+                        </section>
+
+                        <section>
+                            <h2 className="font-medium mb-1">
+                                What was found
+                            </h2>
+                            {
+                                data.findings.map((item) => (
+                                    <p className="text-sm text-gray-700 my-4 leading-relaxed">
+                                        {item?.explanation}
+                                    </p>
+                                ))
+                            }
                         </section>
 
                         <section>
@@ -113,14 +131,14 @@ const ReportPage = () => {
                             </p>
                         </section>
 
-                        <section>
+                        {/* <section>
                             <h2 className="font-medium mb-1">
                                 How it may relate to symptoms
                             </h2>
                             <p className="text-sm text-gray-700 leading-relaxed">
                                 {data.how_it_relates_to_symptoms}
                             </p>
-                        </section>
+                        </section> */}
 
                         <section>
                             <h2 className="font-medium mb-1">
