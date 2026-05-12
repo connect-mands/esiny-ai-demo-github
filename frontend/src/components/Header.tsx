@@ -1,11 +1,3 @@
-const mainUrl = import.meta.env.VITE_MAIN_URL;
-
-const tabs = [
-    { name: "Why Endoscopic", path: "/why-endoscopic" },
-    { name: "Meet ESINY", path: "/meet-esiny" },
-    { name: "Blog", path: "/blog" }
-]
-
 import { COLORS } from '../constants/color';
 import { useEffect, useRef, useState } from 'react';
 import { MdMenu } from "react-icons/md";
@@ -16,6 +8,13 @@ import logo__small from "../assets/logo-small-dark.svg"
 import logo_small_accent from "../assets/logo-small-accent.svg"
 import logo_small_dark from "../assets/logo-small-dark.svg"
 import { footerLinks } from './Footer';
+import { mainSiteBaseUrl as mainUrl } from "../config/env";
+
+const tabs = [
+    { name: "Why Endoscopic", path: "/why-endoscopic" },
+    { name: "Meet ESINY", path: "/meet-esiny" },
+    { name: "Blog", path: "/blog" }
+]
 
 const Header = () => {
     const [scrolled, setScrolled] = useState(false);

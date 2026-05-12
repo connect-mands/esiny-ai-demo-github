@@ -1,4 +1,8 @@
-const mainUrl = import.meta.env.VITE_MAIN_URL;
+import { CiLocationOn } from "react-icons/ci";
+import { IoCallOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import Logo_light from "../assets/logo-light.svg";
+import { mainSiteBaseUrl as mainUrl } from "../config/env";
 
 export const footerLinks = [
     { label: "FAQ", to: "/faqs" },
@@ -41,11 +45,6 @@ export const socialLinks = [
         to: "https://www.tiktok.com/@nycspine",
     },
 ];
-
-import { CiLocationOn } from "react-icons/ci";
-import { IoCallOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
-import Logo_light from "../assets/logo-light.svg"
 
 const Footer = () => {
     return (
