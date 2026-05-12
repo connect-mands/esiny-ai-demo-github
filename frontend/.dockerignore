@@ -9,9 +9,10 @@ build
 .git
 .gitignore
 
-# Env files (never include secrets)
+# Env files (never bake local secrets into the image)
 .env
-.env.*
+.env.local
+.env.*.local
 
 # Logs
 npm-debug.log
