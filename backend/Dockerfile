@@ -3,6 +3,10 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# node images set NODE_ENV=production, which makes `npm ci` skip devDependencies.
+# TypeScript lives in devDependencies, so we must install it for this stage.
+ENV NODE_ENV=development
+
 COPY package*.json ./
 
 RUN npm ci

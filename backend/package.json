@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/tsc",
+    "build": "tsc",
     "dev": "npx concurrently \"npx tsc --watch\" \"npx nodemon dist/index.js\""
   },
   "keywords": [],
