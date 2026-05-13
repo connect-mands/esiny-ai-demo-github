@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import { extractTextWithOCRSpace } from "../services/extraction.service.js";
 import { analyzeMRI } from "../services/ai.service.js";
 import { stripPHI } from "../utils/sanitizer.js";
-import Report from "../model/report.schema.js";
+import Report, { IPdf } from "../model/report.schema.js";
 import { dbLogger } from "../utils/logger.js";
 import fs from "fs/promises";
 import mongoose from "mongoose";
-import { encryptBuffer, getExtension } from "../utils/encryption.js";
+import { decryptJson, encryptBuffer, encryptJson, getExtension } from "../utils/crypto.js";
 
 
 export const generateMRIReport = async (req: Request, res: Response) => {
@@ -21,7 +21,7 @@ export const generateMRIReport = async (req: Request, res: Response) => {
                 success: false
             })
         }
-        console.log(reportText)
+
         const cleanedText = stripPHI(reportText);
 
         const aiResult = await analyzeMRI({
@@ -32,13 +32,24 @@ export const generateMRIReport = async (req: Request, res: Response) => {
             throw new Error(aiResult.error);
         }
 
-        let iv = "";
+        let pdfData: IPdf = {
+            path: "",
+            iv: "",
+            authTag: "",
+            mimeType: "",
+        };
 
         if (file) {
             const encBuffer = encryptBuffer(file.buffer);
-            iv = encBuffer.iv;
             const ext = getExtension(file.mimetype);
-            await fs.writeFile(`./uploads/${iv}.${ext}`, encBuffer.data);
+            await fs.writeFile(`./uploads/${encBuffer.iv}.${ext}`, encBuffer.encryptedBuffer);
+
+            pdfData = {
+                path: `uploads/${encBuffer.iv}`,
+                iv: encBuffer.iv,
+                authTag: encBuffer.authTag,
+                mimeType: file.mimetype,
+            };
 
             reportText = await extractTextWithOCRSpace(
                 file.buffer,
@@ -46,21 +57,28 @@ export const generateMRIReport = async (req: Request, res: Response) => {
             );
         }
 
-        const report = await Report.create({
+        const jsonReport = {
             summary: aiResult.summary || "",
             findings: aiResult?.findings || [],
             what_matters_most: aiResult.what_matters_most || "",
-            questions_for_doctor: aiResult.questions_for_doctor || [],
-            iv: iv,
+            questions_for_doctor: aiResult.questions_for_doctor || []
+        }
+
+        const encryptedReport = encryptJson(jsonReport);
+
+        const report: any = await Report.create({
+            encryptedData: encryptedReport.encryptedData,
+            iv: encryptedReport.iv,
+            authTag: encryptedReport.authTag,
+            pdf: pdfData,
         });
 
         return res.status(200).json({
             message: "Report generated successfully",
             success: true,
             data: {
-                response: report,
+                report,
                 reportId: report._id,
-                reportUrl: `http://localhost:5000/api/report/${report._id}`,
             },
         });
     } catch (error: any) {
@@ -94,11 +112,17 @@ export const getMRIreportByID = async (req: Request, res: Response) => {
             })
         }
 
-        const report = await Report.findById(id)
+        const report: any = await Report.findById(id)
+
+        const decryptedJson = decryptJson({
+            encryptedData: report.encryptedData,
+            iv: report.iv,
+            authTag: report.authTag,
+        });
 
         return res.status(200).json({
             success: true,
-            report
+            report: decryptedJson
         })
 
     } catch (error: any) {
