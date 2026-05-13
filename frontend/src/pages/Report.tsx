@@ -35,7 +35,6 @@ const ReportPage = () => {
         setError("")
         try {
             const { data } = await apiClient.get(`/report/${id}`)
-            console.log(data)
             setData(data.report)
         } catch (error: any) {
             console.log(error)

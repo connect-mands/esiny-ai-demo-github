@@ -37,7 +37,7 @@ export default function Home() {
     const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
         if (reportText.trim() === "" && !file) {
-            alert("Please provide a report text or upload a file.");
+            toast.error("Please provide a report text or upload a file.");
             return;
         }
         setLoading(true);
@@ -83,8 +83,6 @@ export default function Home() {
                     onSubmit={handleSubmit}
                     className="mt-8 border border-gray-200 rounded-lg p-6 space-y-6"
                 >
-
-                    {/* TEXT INPUT */}
                     <div>
                         <label className="block text-sm font-medium mb-2">
                             Paste your MRI report
@@ -101,9 +99,8 @@ export default function Home() {
                             Avoid including personal identifiers
                         </p>
                     </div>
-
-                    {/* FILE INPUT */}
-                    <div>
+                    {/* File upload , Currently this features is hidden*/}
+                    <div className="hidden">
                         <label className="block text-sm font-medium mb-2">
                             Or upload MRI report
                         </label>
