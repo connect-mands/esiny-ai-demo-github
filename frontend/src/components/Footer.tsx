@@ -124,7 +124,6 @@ const Footer = () => {
                             popularTopics.map((topic) => (
                                 <li key={topic.label}>
                                     <a
-                                        key={topic.label}
                                         href={spaOrExternalPathHref(topic.to)}
                                         className={`text-gray-100 text-sm hover:text-[#02EEFF] hover:underline  transition`}
                                     >
