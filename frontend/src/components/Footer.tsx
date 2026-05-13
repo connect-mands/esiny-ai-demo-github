@@ -1,8 +1,7 @@
 import { CiLocationOn } from "react-icons/ci";
 import { IoCallOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
 import Logo_light from "../assets/logo-light.svg";
-import { mainSiteBaseUrl as mainUrl } from "../config/env";
+import { MainNavLink } from "./MainNavLink";
 
 export const footerLinks = [
     { label: "FAQ", to: "/faqs" },
@@ -60,16 +59,19 @@ const Footer = () => {
 
                     <div className="text-xs flex gap-2 items-center mb-2">
                         <CiLocationOn color="white" />
-                        <Link to={"https://maps.app.goo.gl/AijhAv54xbaBrSNe7"} className={`hover:text-[#02EEFF] hover:underline transition`}>
+                        <a
+                            href="https://maps.app.goo.gl/AijhAv54xbaBrSNe7"
+                            className={`hover:text-[#02EEFF] hover:underline transition`}
+                        >
                             215 E 77th St, New York, NY 10075
-                        </Link>
+                        </a>
                     </div>
 
                     <div className="text-xs flex gap-2 items-center mb-2">
                         <IoCallOutline />
-                        <Link to={"tel:+15187086300"} className={`hover:text-[#02EEFF] hover:underline transition`}>
+                        <a href="tel:+15187086300" className={`hover:text-[#02EEFF] hover:underline transition`}>
                             +1 518-708-6300
-                        </Link>
+                        </a>
                     </div>
 
                     {/* MAP */}
@@ -83,12 +85,13 @@ const Footer = () => {
                     <ul className="space-y-2 text-sm">
                         {footerLinks.map((item) => (
                             <li key={item.label}>
-                                <Link
-                                    to={`${mainUrl}${item.to}`}
+                                <MainNavLink
+                                    key={item.label}
+                                    to={item.to}
                                     className={`text-gray-100 text-sm hover:text-[#02EEFF] hover:underline transition`}
                                 >
                                     {item.label.toUpperCase()}
-                                </Link>
+                                </MainNavLink>
                             </li>
                         ))}
                     </ul>
@@ -101,12 +104,14 @@ const Footer = () => {
                     <ul className="space-y-3 text-sm mb-6">
                         {socialLinks.map((link) => (
                             <li key={link.label}>
-                                <Link
-                                    to={`${link.to}`}
+                                <a
+                                    href={link.to}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className={`text-gray-100 text-sm hover:text-[#02EEFF] hover:underline  transition`}
                                 >
                                     {link.label}
-                                </Link>
+                                </a>
                             </li>
                         ))}
                     </ul>
@@ -119,12 +124,13 @@ const Footer = () => {
                         {
                             popularTopics.map((topic) => (
                                 <li key={topic.label}>
-                                    <Link
-                                        to={`${mainUrl}${topic.to}`}
+                                    <MainNavLink
+                                        key={topic.label}
+                                        to={topic.to}
                                         className={`text-gray-100 text-sm hover:text-[#02EEFF] hover:underline  transition`}
                                     >
                                         {topic.label}
-                                    </Link>
+                                    </MainNavLink>
                                 </li>
                             ))
                         }
@@ -137,9 +143,9 @@ const Footer = () => {
                 <p>
                     The Endoscopic Spine Institute of New York© 2026
                 </p>
-                <Link to={`${mainUrl}/terms-of-service`} className="underline cursor-pointer block mt-2">
+                <MainNavLink to="/terms-of-service" className="underline cursor-pointer block mt-2">
                     TERMS & CONDITIONS
-                </Link>
+                </MainNavLink>
             </div>
 
         </footer >

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { apiClient } from "../api/client";
 import AppLayout from "../Layout/AppLayout";
+import { appShareUrl } from "../config/env";
 
 interface Ifindings {
     heading:string,
@@ -81,16 +82,16 @@ const ReportPage = () => {
                         <div className="flex gap-2">
 
 
-                            <button onClick={() => handleCopy(`${window.location.origin}/report/${id}`)} className="text-sm hover:bg-black hover:text-white transition duration-300 border px-3 py-1 rounded-md cursor-pointer">
+                            <button onClick={() => handleCopy(appShareUrl(`/report/${id}`))} className="text-sm hover:bg-black hover:text-white transition duration-300 border px-3 py-1 rounded-md cursor-pointer">
                                 {isCopy ? "Copied!" : "Copy Share URL"}
                             </button>
 
-                            <a
-                                href="/"
+                            <Link
+                                to="/"
                                 className="text-sm text-white bg-black hover:bg-white hover:text-black transition duration-300 border px-3 py-1 rounded-md"
                             >
                                 Start new report
-                            </a>
+                            </Link>
                         </div>
                     </div>
 
