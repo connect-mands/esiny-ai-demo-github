@@ -11,7 +11,7 @@ import { MainNavLink } from "./MainNavLink";
 import { spaOrExternalPathHref } from "../config/env";
 
 const tabs = [
-    { name: "Why Endoscopic", path: "/why-endoscopic" },
+    { name: "Why Endoscopicss", path: "/why-endoscopic" },
     { name: "Meet ESINY", path: "/meet-esiny" },
     { name: "Blog", path: "/blog" }
 ]
