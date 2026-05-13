@@ -8,6 +8,7 @@ import logo_small_accent from "../assets/logo-small-accent.svg"
 import logo_small_dark from "../assets/logo-small-dark.svg"
 import { footerLinks } from './Footer';
 import { MainNavLink } from "./MainNavLink";
+import { spaOrExternalPathHref } from "../config/env";
 
 const tabs = [
     { name: "Why Endoscopic", path: "/why-endoscopic" },
@@ -87,23 +88,23 @@ const Header = () => {
                 <div className="w-[83%] flex justify-evenly items-end">
                     <div className="w-[80%] flex justify-evenly gap-6">
                         {tabs.map((tab) => (
-                            <MainNavLink
+                            <a
                                 key={tab.path}
-                                to={tab.path}
+                                href={spaOrExternalPathHref(tab.path)}
                                 className="transition duration-300 text-[#344856] hover:text-[#02EEFF] px-3 py-2 rounded-md font-semibold text-sm"
                             >
                                 {tab.name.toUpperCase()}
-                            </MainNavLink>
+                            </a>
                         ))}
                     </div>
 
-                    <MainNavLink
-                        to="/contact"
+                    <a
+                        href={spaOrExternalPathHref("/contact")}
                         className="w-[17%] cursor-pointer bg-[#02EEFF] text-black font-medium tracking-widest rounded-lg justify-center py-2 flex items-center gap-2 transition-all duration-500 border-2 border-white hover:border-[#02EEFF] hover:bg-white text-sm"
                     >
                         CONTACT US
                         <span className="text-xl">→</span>
-                    </MainNavLink>
+                    </a>
                 </div>
             </header>
 
@@ -120,12 +121,12 @@ const Header = () => {
                     </MainNavLink>
                 </div>
 
-                <MainNavLink
-                    to="/contact"
+                <a
+                    href={spaOrExternalPathHref("/contact")}
                     className="w-[60%] cursor-pointer bg-[#02EEFF] text-black font-medium tracking-widest rounded-lg justify-center py-4 flex items-center gap-2 transition-all duration-500 border-2 border-white hover:border-[#02EEFF] hover:bg-white text-zinc-700"
                 >
                     CONTACT US
-                </MainNavLink>
+                </a>
 
                 <button onClick={() => setOpenMenu(true)} className="flex-1 flex justify-end">
                     <MdMenu size={30} className="text-zinc-700" />
@@ -139,12 +140,12 @@ const Header = () => {
                                     <img src={logo_small_accent} alt="ESINY" className="w-full h-auto" />
                                 </MainNavLink>
                             </div>
-                            <MainNavLink
-                                to="/contact"
+                            <a
+                                href={spaOrExternalPathHref("/contact")}
                                 className="w-[60%] cursor-pointer bg-[#02EEFF] text-black font-medium tracking-widest rounded-lg justify-center py-4 flex items-center gap-2 transition-all duration-500"
                             >
                                 CONTACT US
-                            </MainNavLink>
+                            </a>
                         </div>
                         <button onClick={() => setOpenMenu(false)}>
                             <IoMdClose size={30} className="text-zinc-700" color={COLORS.primary} />
@@ -152,30 +153,41 @@ const Header = () => {
                     </div>
 
                     <div className="mt-6">
-                        {[{ name: "Home", path: "/" }, ...tabs].map((tab) => (
-                            <MainNavLink
-                                key={tab.path}
-                                to={tab.path}
-                                className="transition duration-300 text-[#02EEFF] mb-6 block rounded-md font-semibold text-xl"
-                                onClick={() => setOpenMenu(false)}
-                            >
-                                {tab.name}
-                            </MainNavLink>
-                        ))}
+                        {[{ name: "Home", path: "/" as const }, ...tabs].map((tab) =>
+                            tab.path === "/" ? (
+                                <MainNavLink
+                                    key="home"
+                                    to="/"
+                                    className="transition duration-300 text-[#02EEFF] mb-6 block rounded-md font-semibold text-xl"
+                                    onClick={() => setOpenMenu(false)}
+                                >
+                                    {tab.name}
+                                </MainNavLink>
+                            ) : (
+                                <a
+                                    key={tab.path}
+                                    href={spaOrExternalPathHref(tab.path)}
+                                    className="transition duration-300 text-[#02EEFF] mb-6 block rounded-md font-semibold text-xl"
+                                    onClick={() => setOpenMenu(false)}
+                                >
+                                    {tab.name}
+                                </a>
+                            )
+                        )}
                     </div>
 
                     <hr className="text-[#02EEFF] my-8" />
 
                     <div className="mt-4">
                         {footerLinks.map((tab) => (
-                            <MainNavLink
+                            <a
                                 key={tab.label}
-                                to={tab.to}
+                                href={spaOrExternalPathHref(tab.to)}
                                 className="transition duration-300 text-[#02EEFF] mb-6 block rounded-md"
                                 onClick={() => setOpenMenu(false)}
                             >
                                 {tab.label}
-                            </MainNavLink>
+                            </a>
                         ))}
                     </div>
                 </div>

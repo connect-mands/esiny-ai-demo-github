@@ -2,8 +2,67 @@ import { useNavigate } from "react-router-dom";
 import { apiClient } from "../api/client";
 import { COLORS } from "../constants/color";
 import AppLayout from "../Layout/AppLayout";
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { footerLinks, popularTopics } from "../components/Footer";
+import { pathToHomeHashFragment } from "../config/env";
+
+type AnchorSection = { id: string; title: string; body: string };
+
+const PRIMARY_SECTIONS: AnchorSection[] = [
+    {
+        id: "why-endoscopic",
+        title: "Why endoscopic spine surgery?",
+        body: "Endoscopic approaches use small incisions and a camera to treat spine conditions with less tissue disruption than many open procedures. Recovery timelines vary by person and condition. Ask a qualified spine specialist whether endoscopic options may be appropriate for you.",
+    },
+    {
+        id: "meet-esiny",
+        title: "Meet ESINY",
+        body: "The Endoscopic Spine Institute of New York focuses on minimally invasive and endoscopic spine care, clear communication, and shared decision-making with your care team.",
+    },
+    {
+        id: "blog",
+        title: "Blog & resources",
+        body: "We share plain-language information about spine health and treatment concepts. This MRI explainer is educational only and does not replace an in-person evaluation.",
+    },
+    {
+        id: "contact",
+        title: "Contact us",
+        body: "For appointments or clinical questions, use your usual office or referral channels. To turn MRI report wording into a simpler summary (not medical advice), use the form above.",
+    },
+];
+
+const STUB_BODY =
+    "This section is a placeholder on the explainer app. For full practice information, visit our main website or contact the office directly.";
+
+function buildHomeAnchorSections(): AnchorSection[] {
+    const seen = new Set(PRIMARY_SECTIONS.map((s) => s.id));
+    const out: AnchorSection[] = [...PRIMARY_SECTIONS];
+
+    for (const item of footerLinks) {
+        const id = pathToHomeHashFragment(item.to);
+        if (!seen.has(id)) {
+            seen.add(id);
+            out.push({ id, title: item.label, body: STUB_BODY });
+        }
+    }
+    for (const topic of popularTopics) {
+        const id = pathToHomeHashFragment(topic.to);
+        if (!seen.has(id)) {
+            seen.add(id);
+            out.push({ id, title: topic.label, body: STUB_BODY });
+        }
+    }
+    const termsExtra = pathToHomeHashFragment("/terms-of-service");
+    if (!seen.has(termsExtra)) {
+        out.push({
+            id: termsExtra,
+            title: "Terms & conditions",
+            body: STUB_BODY,
+        });
+    }
+    return out;
+}
 
 export default function Home() {
     const [reportText, setReportText] = useState("");
@@ -13,6 +72,7 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate()
+    const anchorSections = useMemo(() => buildHomeAnchorSections(), []);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
         if (!event.target.files || event.target.files.length === 0) {
@@ -164,6 +224,19 @@ export default function Home() {
                         {loading ? "Processing..." : "Show Me What My MRI Means"}
                     </button>
                 </form>
+            </div>
+
+            <div className="max-w-2xl mx-auto px-4 pb-24 space-y-16">
+                {anchorSections.map((s) => (
+                    <section
+                        key={s.id}
+                        id={s.id}
+                        className="scroll-mt-32 border-t border-gray-200 pt-12"
+                    >
+                        <h2 className="text-xl font-semibold text-zinc-800">{s.title}</h2>
+                        <p className="text-sm text-gray-600 mt-3 leading-relaxed">{s.body}</p>
+                    </section>
+                ))}
             </div>
         </AppLayout>
     );
