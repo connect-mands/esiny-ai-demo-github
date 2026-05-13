@@ -10,7 +10,16 @@ const start = async (): Promise<void> => {
     await dbConnect()
     app.use(express.json())
     app.use(express.urlencoded({extended:true}))
-    app.use(cors())
+    app.use(
+        cors({
+          origin: [
+            "http://localhost:5173",
+            "https://comfy-conkies-f0de1f.netlify.app",
+            "https://e8sowkkwoswg40wo44g44s80.snapphoundtests.com"
+          ],
+          credentials: true
+        })
+      )
     app.use("/api", apiRouter)
 
     app.listen(PORT,() => {
