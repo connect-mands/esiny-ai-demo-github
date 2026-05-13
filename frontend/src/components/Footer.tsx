@@ -1,7 +1,7 @@
 import { CiLocationOn } from "react-icons/ci";
 import { IoCallOutline } from "react-icons/io5";
 import Logo_light from "../assets/logo-light.svg";
-import { spaOrExternalPathHref } from "../config/env";
+import { MainNavLink } from "./MainNavLink";
 
 export const footerLinks = [
     { label: "FAQ", to: "/faqs" },
@@ -85,12 +85,13 @@ const Footer = () => {
                     <ul className="space-y-2 text-sm">
                         {footerLinks.map((item) => (
                             <li key={item.label}>
-                                <a
-                                    href={spaOrExternalPathHref(item.to)}
+                                <MainNavLink
+                                    key={item.label}
+                                    to={item.to}
                                     className={`text-gray-100 text-sm hover:text-[#02EEFF] hover:underline transition`}
                                 >
                                     {item.label.toUpperCase()}
-                                </a>
+                                </MainNavLink>
                             </li>
                         ))}
                     </ul>
@@ -123,12 +124,13 @@ const Footer = () => {
                         {
                             popularTopics.map((topic) => (
                                 <li key={topic.label}>
-                                    <a
-                                        href={spaOrExternalPathHref(topic.to)}
+                                    <MainNavLink
+                                        key={topic.label}
+                                        to={topic.to}
                                         className={`text-gray-100 text-sm hover:text-[#02EEFF] hover:underline  transition`}
                                     >
                                         {topic.label}
-                                    </a>
+                                    </MainNavLink>
                                 </li>
                             ))
                         }
@@ -141,12 +143,9 @@ const Footer = () => {
                 <p>
                     The Endoscopic Spine Institute of New York© 2026
                 </p>
-                <a
-                    href={spaOrExternalPathHref("/terms-of-service")}
-                    className="underline cursor-pointer block mt-2"
-                >
+                <MainNavLink to="/terms-of-service" className="underline cursor-pointer block mt-2">
                     TERMS & CONDITIONS
-                </a>
+                </MainNavLink>
             </div>
 
         </footer >

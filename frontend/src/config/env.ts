@@ -40,28 +40,3 @@ export function appShareUrl(path: string): string {
     if (typeof window === "undefined") return publicAppPath(path);
     return `${window.location.origin}${publicAppPath(path)}`;
 }
-
-/**
- * Full document URL to the SPA homepage plus a hash (Vite `BASE_URL` + `#fragment`).
- * Use for `<a href>` so `/ai/why-endoscopic` routes are avoided when only `/` is registered.
- */
-export function homeSectionHref(fragment: string): string {
-    const id = fragment.replace(/^#/, "");
-    const raw = trimOrEmpty(import.meta.env.BASE_URL) || "/";
-    const withSlash = raw.endsWith("/") ? raw : `${raw}/`;
-    return `${withSlash}#${id}`;
-}
-
-/** Turn a route like `/what-we-treat` into a safe fragment id `what-we-treat`. */
-export function pathToHomeHashFragment(routePath: string): string {
-    return routePath
-        .replace(/^\//, "")
-        .replace(/\//g, "-")
-        .replace(/\./g, "-");
-}
-
-/** Marketing paths: full main-site URL when `VITE_MAIN_URL` is https, else same-origin hash on the SPA home. */
-export function spaOrExternalPathHref(routePath: string): string {
-    if (isExternalMainSite) return externalMainHref(routePath);
-    return homeSectionHref(pathToHomeHashFragment(routePath));
-}
