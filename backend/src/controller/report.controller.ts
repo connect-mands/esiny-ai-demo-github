@@ -7,6 +7,7 @@ import { dbLogger } from "../utils/logger.js";
 import fs from "fs/promises";
 import mongoose from "mongoose";
 import { decryptJson, encryptBuffer, encryptJson, getExtension } from "../utils/crypto.js";
+import { validateMRIReport } from "../services/reportValidation.service.js";
 
 
 export const generateMRIReport = async (req: Request, res: Response) => {
@@ -22,14 +23,27 @@ export const generateMRIReport = async (req: Request, res: Response) => {
             })
         }
 
-        const cleanedText = stripPHI(reportText);
+        const validation = validateMRIReport(reportText);
+        
+        if (!validation.valid) {
+            return res.status(400).json({
+                success: false,
+                message: validation.reason,
+            });
+        }
 
+        const cleanedText = stripPHI(reportText);
+        
         const aiResult = await analyzeMRI({
             reportText: cleanedText,
             symptoms,
         });
+
         if (aiResult?.ok === false) {
-            throw new Error(aiResult.error);
+            return res.status(400).json({
+                success: false,
+                message: aiResult.error,
+            });
         }
 
         let pdfData: IPdf = {

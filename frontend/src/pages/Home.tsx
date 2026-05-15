@@ -3,7 +3,7 @@ import { apiClient } from "../api/client";
 import { COLORS } from "../constants/color";
 import AppLayout from "../Layout/AppLayout";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export default function Home() {
     const [reportText, setReportText] = useState("");

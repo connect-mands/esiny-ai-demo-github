@@ -27,7 +27,7 @@
     "multer": "^2.1.1",
     "nodemon": "^3.1.14",
     "ocr-space-api-wrapper": "^2.4.7",
-    "openai": "^6.35.0",
+    "openai": "^6.37.0",
     "pdf-parse": "^2.4.5",
     "tesseract.js": "^7.0.0",
     "winston": "^3.19.0"
