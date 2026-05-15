@@ -25,7 +25,7 @@ MRI REPORT:
 ${reportText}
 
 SYMPTOMS:
-${symptoms || "Not provided"}
+${symptoms?.trim() ? symptoms : "Not provided"}
 `,
                     },
                 ],
